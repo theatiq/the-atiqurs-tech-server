@@ -26,7 +26,7 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         // await client.connect();
         const blogsCollection = client.db("blogsDB").collection('blogs')
-        const wishListCollection = client.db("blogsDB").collection("watchList")
+        const wishListCollection = client.db("blogsDB").collection("wishList")
 
         app.get("/reviews", async (req, res) => {
             const cursor = blogsCollection.find()
@@ -79,10 +79,9 @@ async function run() {
         })
 
 
-        app.post("/addReview", async (req, res) => {
-            const newReview = req.body
-            console.log(newReview)
-            const result = await blogsCollection.insertOne(newReview)
+        app.post("/addPost", async (req, res) => {
+            const newPost = req.body
+            const result = await blogsCollection.insertOne(newPost)
             res.send(result)
         })
 
@@ -94,16 +93,16 @@ async function run() {
             res.send(result)
         })
 
-        app.put("/review/:id", async (req, res) => {
+        app.put("/update/:id", async (req, res) => {
             const id = req.params.id
             const filter = { _id: new ObjectId(id) }
             const options = { upsert: true };
-            const newReview = req.body
-            const updatedReview = {
-                $set: newReview
+            const newPost = req.body
+            const updatedPost = {
+                $set: newPost
 
             }
-            const result = await blogsCollection.updateOne(filter, updatedReview, options)
+            const result = await blogsCollection.updateOne(filter, updatedPost, options)
             res.send(result)
 
         })
