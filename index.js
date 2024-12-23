@@ -78,12 +78,13 @@ async function run() {
             res.send(result)
         })
 
-
+        // Add New Post
         app.post("/addPost", async (req, res) => {
             const newPost = req.body
             const result = await blogsCollection.insertOne(newPost)
             res.send(result)
         })
+
 
         app.post("/watchList", async (req, res) => {
             // const id = req.params.id
@@ -92,7 +93,7 @@ async function run() {
             const result = await wishListCollection.insertOne(watchList)
             res.send(result)
         })
-
+        // Update a Post
         app.put("/update/:id", async (req, res) => {
             const id = req.params.id
             const filter = { _id: new ObjectId(id) }
@@ -100,14 +101,12 @@ async function run() {
             const newPost = req.body
             const updatedPost = {
                 $set: newPost
-
             }
             const result = await blogsCollection.updateOne(filter, updatedPost, options)
             res.send(result)
-
         })
-        // Delete from Review
-        app.delete("/review/:id", async (req, res) => {
+        // Delete a Blog
+        app.delete("/blog/:id", async (req, res) => {
             const id = req.params.id
             const query = { _id: new ObjectId(id) }
             const result = await blogsCollection.deleteOne(query)
