@@ -71,7 +71,7 @@ async function run() {
             res.send(result)
         })
         // My Watch List
-        app.get("/myWatchList", async (req, res) => {
+        app.get("/myWishList", async (req, res) => {
             const email = req.query.email
             const filter = { email }
             const result = await wishListCollection.find(filter).toArray()
@@ -86,11 +86,10 @@ async function run() {
         })
 
 
-        app.post("/watchList", async (req, res) => {
+        app.post("/wishList", async (req, res) => {
             // const id = req.params.id
-            const watchList = req.body
-            console.log(watchList)
-            const result = await wishListCollection.insertOne(watchList)
+            const wishList = req.body
+            const result = await wishListCollection.insertOne(wishList)
             res.send(result)
         })
         // Update a Post
@@ -113,7 +112,7 @@ async function run() {
             res.send(result)
         })
         // Delete from Watch List
-        app.delete("/watchList/:id", async (req, res) => {
+        app.delete("/wishList/:id", async (req, res) => {
             const id = req.params.id
             const query = { _id: id }
             const result = await wishListCollection.deleteOne(query)
