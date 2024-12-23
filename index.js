@@ -27,8 +27,8 @@ async function run() {
         // await client.connect();
         const blogsCollection = client.db("blogsDB").collection('blogs')
         const wishListCollection = client.db("blogsDB").collection("wishList")
-
-        app.get("/reviews", async (req, res) => {
+    // Get All Blogs
+        app.get("/blogs", async (req, res) => {
             const cursor = blogsCollection.find()
             const result = await cursor.toArray()
             res.send(result)
