@@ -35,8 +35,8 @@ async function run() {
             res.send(result)
         })
         // For home Page
-        app.get("/reviewsHome", async (req, res) => {
-            const cursor = blogsCollection.find().sort({ rating: -1 }).limit(6)
+        app.get("/blogsHome", async (req, res) => {
+            const cursor = blogsCollection.find().sort({ postedDate: -1 }).limit(6)
             const result = await cursor.toArray()
             res.send(result)
         })
