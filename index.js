@@ -105,12 +105,7 @@ async function run() {
                 res.status(500).send({ Message: "Server Error. Please try again later." })
             }
         })
-        // app.post("/comment", async (req, res) => {
-        //     const commentData = req.body
-        //     const result = await commentCollection.insertOne(commentData)
-        //     res.send(result)
-        // })
-        // Update a Post
+  
         app.put("/update/:id", async (req, res) => {
             const id = req.params.id
             const filter = { _id: new ObjectId(id) }
