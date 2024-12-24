@@ -1,12 +1,34 @@
 require("dotenv").config()
 const express = require('express');
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express()
 const port = process.env.PORT || 5000
 
-app.use(cors())
+app.use(cors({
+    origin: ['http://localhost:5173', 'https://job-portal-ferdous.web.app', 'https://job-portal-ferdous.firebaseapp.com'],
+    credentials: true
+}))
 app.use(express.json())
+app.use(cookieParser())
+
+const verifyToken = (req, res, next) => {
+    const token = req.cookies?.token
+    // console.log("token inside verify", token)
+    if (!token) {
+        return res.status(401).send({ message: "unauthorized access" })
+    }
+    jwt.verify(token, process.env.TOKEN_SECRET, (err, decoded) => {
+        if (err) {
+            return res.status(401).send({ message: "unauthorized access" })
+        }
+        req.user = decoded
+
+        next()
+    })
+}
 
 
 
@@ -28,6 +50,31 @@ async function run() {
         const blogsCollection = client.db("blogsDB").collection('blogs')
         const wishListCollection = client.db("blogsDB").collection("wishList")
         const commentCollection = client.db("blogsDB").collection("comments")
+
+        app.post("/jwt", (req, res) => {
+            const user = req.body
+            const token = jwt.sign(user, process.env.TOKEN_SECRET, { expiresIn: '10h' })
+
+
+            res.cookie('token', token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+            })
+                .send({ success: true })
+        })
+
+        app.post("/logout", (req, res) => {
+            res.clearCookie("token", {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+            })
+                .send({ success: true })
+        })
+
+
+
         // Get All Blogs
         app.get("/blogs", async (req, res) => {
             const cursor = blogsCollection.find()
@@ -103,7 +150,7 @@ async function run() {
         })
 
         // Add New Post
-        app.post("/addPost", async (req, res) => {
+        app.post("/addPost", verifyToken, async (req, res) => {
             const newPost = req.body
             const result = await blogsCollection.insertOne(newPost)
             res.send(result)
