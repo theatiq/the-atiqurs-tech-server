@@ -40,6 +40,29 @@ async function run() {
             const result = await cursor.toArray()
             res.send(result)
         })
+        // For feature Page
+        app.get("/blogsFeatured", async (req, res) => {
+            const cursor = [
+                {
+                    $addFields: {
+                        longDescriptionLength: { $strLenCP: "$longDescription" },
+                    },
+                },
+                {
+                    $sort: { longDescriptionLength: -1 },
+                },
+                {
+                    $limit: 10,
+                },
+                {
+                    $project: {
+                        longDescriptionLength: 0,
+                    },
+                },
+            ]
+            const result = await blogsCollection.aggregate(cursor).toArray()
+            res.send(result)
+        })
 
 
         app.get("/blogs/:id", async (req, res) => {
