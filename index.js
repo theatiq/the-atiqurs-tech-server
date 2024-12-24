@@ -48,16 +48,16 @@ async function run() {
             const result = await blogsCollection.findOne(query)
             res.send(result)
         })
-        app.get("/watchList", async (req, res) => {
+        app.get("/wishList", async (req, res) => {
             const cursor = wishListCollection.find()
             const result = await cursor.toArray()
             res.send(result)
         })
 
 
-        app.get("/watchList/:id", async (req, res) => {
+        app.get("/wishList/:id", async (req, res) => {
             const id = req.params.id
-            const query = { _id: id }
+            const query = { _id: new ObjectId(id) }
             const result = await wishListCollection.findOne(query)
             res.send(result)
         })
@@ -105,7 +105,7 @@ async function run() {
                 res.status(500).send({ Message: "Server Error. Please try again later." })
             }
         })
-  
+
         app.put("/update/:id", async (req, res) => {
             const id = req.params.id
             const filter = { _id: new ObjectId(id) }
@@ -127,7 +127,7 @@ async function run() {
         // Delete from Watch List
         app.delete("/wishList/:id", async (req, res) => {
             const id = req.params.id
-            const query = { _id: id }
+            const query = { _id: new ObjectId(id) }
             const result = await wishListCollection.deleteOne(query)
             res.send(result)
         })
