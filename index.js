@@ -27,6 +27,7 @@ async function run() {
         // await client.connect();
         const blogsCollection = client.db("blogsDB").collection('blogs')
         const wishListCollection = client.db("blogsDB").collection("wishList")
+        const commentCollection = client.db("blogsDB").collection("comments")
         // Get All Blogs
         app.get("/blogs", async (req, res) => {
             const cursor = blogsCollection.find()
@@ -70,7 +71,7 @@ async function run() {
             const result = await blogsCollection.find(filter).toArray()
             res.send(result)
         })
-        // My Watch List
+        // My Wish List
         app.get("/myWishList", async (req, res) => {
             const email = req.query.email
             const filter = { email }
@@ -92,6 +93,23 @@ async function run() {
             const result = await wishListCollection.insertOne(wishList)
             res.send(result)
         })
+
+        // Post  comments
+        app.post("/comment", async (req, res) => {
+            const commentData = req.body
+            try {
+                const result = await commentCollection.insertOne(commentData)
+                res.status(201).send(result)
+            } catch (error) {
+                console.log("Error adding comment: ", error)
+                res.status(500).send({ Message: "Server Error. Please try again later." })
+            }
+        })
+        // app.post("/comment", async (req, res) => {
+        //     const commentData = req.body
+        //     const result = await commentCollection.insertOne(commentData)
+        //     res.send(result)
+        // })
         // Update a Post
         app.put("/update/:id", async (req, res) => {
             const id = req.params.id
