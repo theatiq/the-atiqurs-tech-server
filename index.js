@@ -8,7 +8,7 @@ const app = express()
 const port = process.env.PORT || 5000
 
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://job-portal-ferdous.web.app', 'https://job-portal-ferdous.firebaseapp.com'],
+    origin: ['http://localhost:5173', 'https://atiqurstech.web.app', 'https://atiqurstech.firebaseapp.com'],
     credentials: true
 }))
 app.use(express.json())
