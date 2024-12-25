@@ -25,6 +25,7 @@ const verifyToken = (req, res, next) => {
             return res.status(401).send({ message: "unauthorized access" })
         }
         req.user = decoded
+        req.email = decoded.email
 
         next()
     })
@@ -142,12 +143,18 @@ async function run() {
             res.send(result)
         })
         // My Wish List
-        app.get("/myWishList",verifyToken, async (req, res) => {
-            const email = req.query.email
+        app.get("/myWishList", verifyToken, async (req, res) => {
+            const email = req.email
             const filter = { email }
             const result = await wishListCollection.find(filter).toArray()
             res.send(result)
         })
+        // app.get("/myWishList",verifyToken, async (req, res) => {
+        //     const email = req.query.email
+        //     const filter = { email }
+        //     const result = await wishListCollection.find(filter).toArray()
+        //     res.send(result)
+        // })
 
         // Add New Post
         app.post("/addPost", verifyToken, async (req, res) => {
