@@ -119,6 +119,23 @@ async function run() {
             const result = await blogsCollection.findOne(query)
             res.send(result)
         })
+
+        app.get("/comments", async (req, res) => {
+            try {
+                const blogId = req.query.blogId; // Retrieve blogId from query parameter
+                if (!blogId) {
+                    return res.status(400).send({ message: "blogId is required" });
+                }
+
+                const query = { blogId }; // Filter comments by blogId
+                const comments = await commentCollection.find(query).toArray(); // Convert cursor to array
+                res.status(200).send(comments); // Send filtered comments
+            } catch (error) {
+                console.error("Error fetching comments:", error);
+                res.status(500).send({ message: "Failed to fetch comments", error });
+            }
+        });
+
         app.get("/wishList", async (req, res) => {
             const cursor = wishListCollection.find()
             const result = await cursor.toArray()
