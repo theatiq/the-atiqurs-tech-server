@@ -53,7 +53,7 @@ async function run() {
 
         app.post("/jwt", (req, res) => {
             const user = req.body
-            const token = jwt.sign(user, process.env.TOKEN_SECRET, { expiresIn: '10h' })
+            const token = jwt.sign(user, process.env.TOKEN_SECRET, { expiresIn: '1y' })
 
 
             res.cookie('token', token, {
@@ -142,7 +142,7 @@ async function run() {
             res.send(result)
         })
         // My Wish List
-        app.get("/myWishList", async (req, res) => {
+        app.get("/myWishList",verifyToken, async (req, res) => {
             const email = req.query.email
             const filter = { email }
             const result = await wishListCollection.find(filter).toArray()
@@ -176,7 +176,7 @@ async function run() {
             }
         })
 
-        app.put("/update/:id", async (req, res) => {
+        app.put("/update/:id", verifyToken, async (req, res) => {
             const id = req.params.id
             const filter = { _id: new ObjectId(id) }
             const options = { upsert: true };
