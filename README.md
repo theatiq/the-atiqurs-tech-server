@@ -2,8 +2,8 @@
    Name : "Atiqur's Tech : A Tech Blog Site"
    Hosted at : Vercel (Server-Side) and Firebase (Client-Side).
    Category : 5
-   Github Client : "https://github.com/programming-hero-web-course2/b10a11-client-side-theatiq"
-   Github Server : "https://github.com/programming-hero-web-course2/b10a11-server-side-theatiq"
+   Github Client: https://github.com/theatiq/the-atiqurs-tech-client
+   Github Server : https://github.com/theatiq/the-atiqurs-tech-server
    todo
    Live Client : "https://atiqurstech.firebaseapp.com/"
    Live Server : "https://assignment-11-atiqur-server.vercel.app/"
